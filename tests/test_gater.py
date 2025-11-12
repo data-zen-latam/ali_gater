@@ -5,10 +5,14 @@ from pathlib import Path
 
 import pytest
 import requests
+from dotenv import load_dotenv
 from ragas.metrics import AspectCritic
 
 from ali_gater import Gater
-from ali_gater.utils import evaluator_llm, router
+from ali_gater.utils import evaluator_llm, llm
+
+# Load environment variables
+load_dotenv()
 
 # Test data
 TEST_URL = "https://briandoddonleadership.com/2019/06/20/truett-cathys-6-legacy-principles-for-leading-chick-fil-a/"
@@ -56,22 +60,16 @@ class TestGater:
 
     def test_invalid_source(self):
         """Test that invalid source raises ValueError."""
-        gater = Gater(principles_source="invalid_path_that_does_not_exist.txt")
-
         with pytest.raises(ValueError, match="must be a valid URL or a file path"):
-            gater._source_to_text()
+            Gater(principles_source="invalid_path_that_does_not_exist.txt")
 
-    def test_router_works(self):
-        """Test the plain LiteLLM router from utils."""
-        response = router.completion(
-            model="gpt-4.1-mini",
-            messages=[{"role": "user", "content": "Say 'Hello from router!' in exactly 5 words."}]
-        )
+    def test_llm_works(self):
+        """Test the OpenAI LLM from utils."""
+        response = llm.invoke("Say 'Hello from LLM!' in exactly 5 words.")
 
-        assert response is not None, "Router should return a response"
-        assert hasattr(response, 'choices'), "Response should have choices"
-        assert len(response.choices) > 0, "Response should have at least one choice"
-        print(f"\nRouter response: {response.choices[0].message.content}")
+        assert response is not None, "LLM should return a response"
+        assert hasattr(response, 'content'), "Response should have content"
+        print(f"\nLLM response: {response.content}")
 
     def test_evaluator_llm_exists(self):
         """Test that evaluator_llm is properly initialized."""

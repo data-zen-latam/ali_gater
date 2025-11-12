@@ -1,16 +1,31 @@
-import json
-from pathlib import Path
+from dotenv import load_dotenv
+from langchain.agents import create_agent
+from langchain.agents.structured_output import ToolStrategy
+from langchain_openai import ChatOpenAI
+from pydantic import BaseModel, ConfigDict
+from ragas.llms import LangchainLLMWrapper
+from ali_gater.prompts import GENERATE_QUESTIONS_PROMPT
 
-from litellm.router import Router
-from ragas.llms import llm_factory
+# Load environment variables
+load_dotenv()
 
-# Get the config path - go up two levels from this file to reach the root
-LITELLM_CONFIG_PATH = Path(__file__).parent.parent.parent / "litellm_config.json"
+# Initialize OpenAI ChatGPT model with JSON mode
+llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    model_kwargs={"response_format": {"type": "json_object"}}
+)
 
-router = Router(model_list=json.load(open(LITELLM_CONFIG_PATH)), routing_strategy="least-busy")
+# Wrap for ragas evaluation metrics
+evaluator_llm = LangchainLLMWrapper(llm)
 
-# Use ragas llm_factory with the router - it will automatically detect and wrap LiteLLM
-evaluator_llm = llm_factory(model="gpt-4.1-mini", client=router)
+# Agent for generating questions from claims
+claims_to_question_agent = create_agent(
+    model=llm,
+    system_prompt=GENERATE_QUESTIONS_PROMPT,
+)
 
-claims_to_question_llm = router
-
+# LLM for extracting claims (with JSON mode)
+extract_claims_llm = ChatOpenAI(
+    model="gpt-4o-mini",
+    model_kwargs={"response_format": {"type": "json_object"}}
+)

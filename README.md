@@ -27,7 +27,7 @@ from ali_gater import Gater
 gater = Gater(principles_source="Your principles document here...")
 
 # Extract claims from principles
-claims = gater.extract_claims()
+claims = await gater.extract_claims()
 
 # Generate evaluation questions
 questions = gater.generate_questions(claims)
