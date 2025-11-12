@@ -24,7 +24,7 @@ pip install ali-gater
 from ali_gater import Gater
 
 # Initialize with your principles document
-gater = Gater(principles_text="Your principles document here...")
+gater = Gater(principles_source="Your principles document here...")
 
 # Extract claims from principles
 claims = gater.extract_claims()

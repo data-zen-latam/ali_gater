@@ -1,0 +1,24 @@
+[
+  {
+    "model_name": "gpt-4.1-mini",
+    "litellm_params": {
+      "model": "openai/gpt-4.1-mini",
+      "api_key": "os.environ/OPENAI_API_KEY"
+    },
+    "model_info": {
+      "id": "gpt-4.1-mini"
+    }
+  },
+  {
+    "model_name": "gpt-4.1-mini",
+    "litellm_params": {
+      "model": "huggingface/moonshotai/Kimi-K2-Thinking:novita",
+      "api_key": "os.environ/HUGGINGFACE_API_KEY"
+    },
+    "model_info": {
+      "id": "kimi-k2-thinking"
+    }
+  }
+]
+
+  

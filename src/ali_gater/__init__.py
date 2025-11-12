@@ -1,4 +1,4 @@
-"""ali-gater: A Python package."""
+"""ali-gater: A lightweight principle driven checker."""
 
 __version__ = "0.1.0"
 

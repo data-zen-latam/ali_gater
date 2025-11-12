@@ -23,7 +23,11 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
 ]
-dependencies = []
+dependencies = [
+    "litellm>=1.79.3",
+    "ragas>=0.0.22",
+    "unstructured[pdf]>=0.11.8",
+]
 
 [project.optional-dependencies]
 dev = [
